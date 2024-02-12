@@ -3,14 +3,14 @@
 /**
  * Aria Labels
  *
- * @link              http://example.com
+ * @link              https://github.com/Silver0034/Aria-Labels
  * @since             1.0.0
  * @package           Aria_Labels
  *
  * @wordpress-plugin
  * Plugin Name:       Aria Labels
- * Plugin URI:        http://example.com/plugin-name-uri/
- * Description:       Adds a checkbox to the advanced tab of blocks in the Gutenberg block editor. When checked, it adds the attribute aria-hidden="true" to the block.
+ * Plugin URI:        https://github.com/Silver0034/Aria-Labels
+ * Description:       Enhance accessibility by adding aria-hidden and aria-label attributes to Gutenberg blocks.
  * Version:           1.0.0
  * Author:            Jacob Lodes
  * Author URI:        http://jlodes.com/
