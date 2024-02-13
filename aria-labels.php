@@ -11,7 +11,7 @@
  * Plugin Name:       Aria Labels
  * Plugin URI:        https://github.com/Silver0034/Aria-Labels
  * Description:       Enhance accessibility by adding aria-hidden and aria-label attributes to Gutenberg blocks.
- * Version:           1.0.0
+ * Version:           2.0.0
  * Author:            Jacob Lodes
  * Author URI:        http://jlodes.com/
  * Text Domain:       aria-hidden
@@ -24,6 +24,9 @@ if (!defined('WPINC')) die;
 
 require_once plugin_dir_path(__FILE__) . 'includes/class-aria-attributes.php';
 new Includes\Aria_Attributes();
+
+require_once plugin_dir_path(__FILE__) . 'includes/class-render-filters.php';
+new Includes\Render_Filters();
 
 if (is_admin()) {
     require_once plugin_dir_path(__FILE__) . 'includes/class-updater.php';
