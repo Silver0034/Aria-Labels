@@ -234,17 +234,29 @@ class Updater
      */
     public function install_update($response, $hook_extra, $result)
     {
-        // Get the plugin directory
-        $directory = plugin_dir_path($this::PLUGIN_FILE);
-
         // Get the global file system object
         global $wp_filesystem;
 
-        // Move the files from result to the directory
-        $wp_filesystem->move($result['destination'], $directory);
+        // Get the plugin directory
+        $directory = plugin_dir_path($this::PLUGIN_FILE);
 
-        // Set the destination for the rest of the files
-        $result['destination'] = $directory;
+        // Get the correct directory name
+        $correct_directory_name = basename($directory);
+
+        // Get the path to the downloaded directory
+        $downloaded_directory_path = $result['destination'];
+
+        // Get the path to the parent directory
+        $parent_directory_path = dirname($downloaded_directory_path);
+
+        // Construct the correct path
+        $correct_directory_path = $parent_directory_path . '/' . $correct_directory_name;
+
+        // Move and rename the downloaded directory
+        $wp_filesystem->move($downloaded_directory_path, $correct_directory_path);
+
+        // Update the destination in the result
+        $result['destination'] = $correct_directory_path;
 
         // If the plugin was active, reactivate it
         if (\is_plugin_active($this::PLUGIN_FILE)) {
