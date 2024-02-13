@@ -19,7 +19,7 @@ The Aria Labels plugin is designed to enhance accessibility on your WordPress we
 -   Adds `aria-hidden` and `aria-label` attributes to Gutenberg blocks to improve accessibility.
 -   The `aria-hidden` attribute is added to the block's HTML if it is set and true in the block's attributes.
 -   The `aria-label` attribute is added to the block's HTML if it is set in the block's attributes.
--   The plugin automatically adds `aria-hidden` to the HTML of image blocks if the 'alt' attribute is empty.
+-   The plugin automatically adds `aria-hidden` to the HTML of image and cover blocks if the 'alt' attribute is empty.
 -   The plugin can be updated directly from GitHub using the `Updater` class.
 
 ## Usage
@@ -68,7 +68,7 @@ For more details, please refer to the inline comments in the code.
 
 ### Render Filters
 
-The `Render_Filters` class is responsible for enhancing the accessibility of image blocks. It adds the `aria-hidden` attribute to the block's HTML if the `alt` attribute is empty.
+The `Render_Filters` class is responsible for enhancing the accessibility of image and cover blocks. It adds the `aria-hidden` attribute to the block's HTML if the `alt` attribute is empty.
 
 The class uses the `render_block` filter to modify the block's HTML. The `add_aria_label_to_empty_alt_tags` method checks if the block is an image block and if the `alt` attribute is empty. If both conditions are met, it adds `aria-hidden="true"` to the `<img` tag in the block's HTML.
 

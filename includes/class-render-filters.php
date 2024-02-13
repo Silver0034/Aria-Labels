@@ -35,7 +35,7 @@ class Render_Filters
      */
     public function add_aria_label_to_empty_alt_tags(string $block_content, array $block): string
     {
-        if ($block['blockName'] !== 'core/image') return $block_content;
+        if (!in_array($block['blockName'], ['core/image', 'core/cover'])) return $block_content;
 
         if (!empty($block['attrs']['alt'])) return $block_content;
 
