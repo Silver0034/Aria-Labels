@@ -29,7 +29,7 @@ wp.hooks.addFilter(
 		settings.edit = wp.compose.createHigherOrderComponent(
 			(BlockEdit) => (props) => {
 				// Create a ToggleControl for the ariaHidden attribute
-				const ariaHiddenToggle = React.createElement(
+				const ariaHiddenToggle = wp.element.createElement(
 					wp.components.ToggleControl,
 					{
 						label: 'Aria Hidden',
@@ -44,7 +44,7 @@ wp.hooks.addFilter(
 				)
 
 				// Create a TextControl for the ariaLabel attribute
-				const ariaLabelInput = React.createElement(
+				const ariaLabelInput = wp.element.createElement(
 					wp.components.TextControl,
 					{
 						label: 'Aria Label',
@@ -59,7 +59,7 @@ wp.hooks.addFilter(
 				)
 
 				// Create a PanelBody that contains the ToggleControl and TextControl
-				const panelBody = React.createElement(
+				const panelBody = wp.element.createElement(
 					wp.components.PanelBody,
 					{ title: 'Aria Labels', initialOpen: true },
 					ariaHiddenToggle,
@@ -67,46 +67,44 @@ wp.hooks.addFilter(
 				)
 
 				// Create InspectorControls that contains the PanelBody
-				const inspectorControls = React.createElement(
+				const inspectorControls = wp.element.createElement(
 					wp.blockEditor.InspectorControls,
 					{},
 					panelBody
 				)
 
 				// Return the original BlockEdit component along with the new InspectorControls
-				return React.createElement(
-					React.Fragment,
+				return wp.element.createElement(
+					wp.element.Fragment,
 					{},
-					React.createElement(BlockEdit, props),
+					wp.element.createElement(BlockEdit, props),
 					inspectorControls
 				)
-			}
+			},
+			'withAriaControls'
 		)(oldEdit)
 
+		// Store the original save function
+		const oldSave = settings.save
+
 		// Replace the save function to include the ARIA labels
-		settings.save = wp.compose.createHigherOrderComponent((BlockSave) => {
-			return (props) => {
-				const { attributes } = props
-				const { ariaHidden, ariaLabel } = attributes
+		settings.save = (props) => {
+			const { attributes } = props
+			const { ariaHidden, ariaLabel } = attributes
 
-				// If ariaHidden is true, add 'aria-hidden' attribute to the block
-				const ariaHiddenAttr = ariaHidden
-					? { 'aria-hidden': 'true' }
-					: {}
+			// If ariaHidden is true, add 'aria-hidden' attribute to the block
+			const ariaHiddenAttr = ariaHidden ? { 'aria-hidden': 'true' } : {}
 
-				// If ariaLabel is not empty, add 'aria-label' attribute to the block
-				const ariaLabelAttr = ariaLabel
-					? { 'aria-label': ariaLabel }
-					: {}
+			// If ariaLabel is not empty, add 'aria-label' attribute to the block
+			const ariaLabelAttr = ariaLabel ? { 'aria-label': ariaLabel } : {}
 
-				// Return the original BlockSave component along with the new ARIA attributes
-				return React.createElement(BlockSave, {
-					...props,
-					...ariaHiddenAttr,
-					...ariaLabelAttr
-				})
-			}
-		}, 'withAriaLabels')(settings.save)
+			// Return the original BlockSave component along with the new ARIA attributes
+			return wp.element.createElement(oldSave, {
+				...props,
+				...ariaHiddenAttr,
+				...ariaLabelAttr
+			})
+		}
 
 		// Return the modified block settings
 		return settings
