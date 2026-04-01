@@ -77,14 +77,32 @@ class Aria_Attributes
                 return $block_content;
             }
 
+            $block_name = isset($block['blockName']) ? $block['blockName'] : '';
+            $aria_label = isset($block['attrs']['ariaLabel']) ? trim((string) $block['attrs']['ariaLabel']) : null;
+            $aria_hidden = isset($block['attrs']['ariaHidden']) ? $block['attrs']['ariaHidden'] : null;
+
             // If the aria-hidden attribute is set and true, add it to the block's HTML.
-            if (isset($block['attrs']['ariaHidden']) && $block['attrs']['ariaHidden']) {
+            if ($aria_hidden) {
                 $target->setAttribute('aria-hidden', 'true');
             }
 
-            // If the aria-label attribute is set, add it to the block's HTML.
-            if (isset($block['attrs']['ariaLabel']) && $block['attrs']['ariaLabel']) {
-                $target->setAttribute('aria-label', $block['attrs']['ariaLabel']);
+            // If the aria-label attribute is set, add it to the correct element(s)
+            if ($aria_label) {
+                $is_navigation_block = strpos($block_name, 'core/navigation') === 0;
+
+                if ($block_name === 'core/button' || $is_navigation_block) {
+                    // Remove any aria-label previously placed on container/root.
+                    $target->removeAttribute('aria-label');
+
+                    // Place aria-label on all <a> elements inside button/navigation-related blocks.
+                    $links = $dom->getElementsByTagName('a');
+                    foreach ($links as $link) {
+                        $link->setAttribute('aria-label', $aria_label);
+                    }
+                } else {
+                    // Default: place on root element
+                    $target->setAttribute('aria-label', $aria_label);
+                }
             }
 
             // Save the modified HTML back into the block content.

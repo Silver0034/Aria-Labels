@@ -84,28 +84,6 @@ wp.hooks.addFilter(
 			'withAriaControls'
 		)(oldEdit)
 
-		// Store the original save function
-		const oldSave = settings.save
-
-		// Replace the save function to include the ARIA labels
-		settings.save = (props) => {
-			const { attributes } = props
-			const { ariaHidden, ariaLabel } = attributes
-
-			// If ariaHidden is true, add 'aria-hidden' attribute to the block
-			const ariaHiddenAttr = ariaHidden ? { 'aria-hidden': 'true' } : {}
-
-			// If ariaLabel is not empty, add 'aria-label' attribute to the block
-			const ariaLabelAttr = ariaLabel ? { 'aria-label': ariaLabel } : {}
-
-			// Return the original BlockSave component along with the new ARIA attributes
-			return wp.element.createElement(oldSave, {
-				...props,
-				...ariaHiddenAttr,
-				...ariaLabelAttr
-			})
-		}
-
 		// Return the modified block settings
 		return settings
 	}
